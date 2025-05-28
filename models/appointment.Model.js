@@ -1,6 +1,17 @@
 const mongoose = require('mongoose');
 const { Schema, model, models } = mongoose;
 
+const FeedbackSchema = new Schema({
+  brokerId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+  propertyId: { type: Schema.Types.ObjectId, ref: 'Property', required: true },
+  status: {
+    type: String,
+    enum: ['liked', 'not_liked'],
+    required: true
+  },
+  reservationMade: { type: Boolean, default: false }
+}, { _id: false });
+
 const AppointmentSchema = new Schema({
   buyerId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
   brokerId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
@@ -16,7 +27,8 @@ const AppointmentSchema = new Schema({
     enum: ['initial', 'payment'], 
     required: true 
   },
-  reservationExpiry: { type: Date }
+  reservationExpiry: { type: Date },
+  feedbacks: [FeedbackSchema]
 }, { timestamps: true });
 
 AppointmentSchema.index({ buyerId: 1, brokerId: 1, propertyId: 1, appointmentDate: 1 });

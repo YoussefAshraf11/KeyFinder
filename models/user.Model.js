@@ -18,7 +18,11 @@ const UserSchema = new Schema({
     required: true 
   },
   phone: { type: String },
-  changecredentials: Date
+  changecredentials: Date,
+  favourites: [{
+    propertyId: { type: Schema.Types.ObjectId, ref: 'Property', required: true },
+    createdAt: { type: Date, default: Date.now }
+  }]
 }, { timestamps: true });
 
 // Create index for efficient querying
