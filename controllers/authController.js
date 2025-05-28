@@ -36,7 +36,7 @@ exports.signup = async (req, res) => {
 
     // 7. Create new user
     const newUser = new userModel({
-      name: username,
+      username,
       email,
       password: hashedPassword,
       phone,
@@ -87,7 +87,7 @@ exports.login = async (req, res) => {
       token,
       user: {
         id: user._id,
-        name: user.name,
+        username: user.username,
         email: user.email,
         role: user.role
       }
