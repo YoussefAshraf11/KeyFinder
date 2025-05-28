@@ -16,19 +16,25 @@ exports.signup = async (req, res) => {
     }
 
     // 3. Check if email already exists
-    const existingUser = await userModel.findOne({ email });
-    if (existingUser) {
+    const existingEmail = await userModel.findOne({ email });
+    if (existingEmail) {
       return res.status(409).json({ message: 'Email already in use.' });
     }
 
-    // 4. Validate role or set default
+    // 4. Check if username already exists
+    const existingUsername = await userModel.findOne({ username });
+    if (existingUsername) {
+      return res.status(409).json({ message: 'Username already taken. Please choose a different one.' });
+    }
+
+    // 5. Validate role or set default
     const validRoles = Object.values(roletypes); // ['buyer', 'broker', 'admin']
     const userRole = role && validRoles.includes(role) ? role : roletypes.buyer;
 
-    // 5. Hash the password
+    // 6. Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // 6. Create new user
+    // 7. Create new user
     const newUser = new userModel({
       name: username,
       email,
@@ -45,6 +51,7 @@ exports.signup = async (req, res) => {
     res.status(500).json({ message: 'Server error.' });
   }
 };
+
 
 exports.login = async (req, res) => {
   try {
