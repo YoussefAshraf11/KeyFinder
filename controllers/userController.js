@@ -4,7 +4,16 @@ const { successResponse, errorResponse } = require('../utils/helpers');
 
 exports.getAllUsers = async (req, res) => {
   try {
-    const users = await userModel.find().select('-password -otp -otpExpiry');
+    const { role } = req.query;
+    const validRoles = ['buyer', 'broker', 'admin'];
+    
+    // Build query
+    const query = {};
+    if (role && validRoles.includes(role)) {
+      query.role = role;
+    }
+    
+    const users = await userModel.find(query).select('-password -otp -otpExpiry');
     return res.status(200).json(successResponse(users));
   } catch (error) {
     return res.status(500).json(errorResponse('Server error while fetching users.'));
