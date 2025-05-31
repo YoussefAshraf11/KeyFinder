@@ -9,7 +9,7 @@ const roletypes = {
 
 // User Schema (for Buyers, Brokers, and Admins)
 const UserSchema = new Schema({
-  username: { type: String, required: true , unique: true },
+  username: { type: String, required: true, unique: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true }, // Hashed password
   role: { 
@@ -18,6 +18,14 @@ const UserSchema = new Schema({
     required: true 
   },
   phone: { type: String },
+  otp: { 
+    type: String,
+    default: null
+  },
+  otpExpiry: {
+    type: Date,
+    default: null
+  },
   changecredentials: Date,
   favourites: [{
     propertyId: { type: Schema.Types.ObjectId, ref: 'Property', required: true },
@@ -27,7 +35,6 @@ const UserSchema = new Schema({
 
 // Create index for efficient querying
 UserSchema.index({ email: 1 });
-UserSchema.index({ username: 1 });
 
 
 // Create or reuse Mongoose model
